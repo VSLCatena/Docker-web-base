@@ -36,8 +36,8 @@ jobs:
             ECHO "git merge -s recursive -X theirs github/master"
             git merge -s recursive -X theirs github/master
             
-            ECHO "git push -u origin $(Build.SourceBranchName)"
-            git push -u origin $(Build.SourceBranchName)
+            ECHO "git push -u origin $GITHUB_REF""
+            git push -u origin $GITHUB_REF
 
             ECHO "git status"
             git status
