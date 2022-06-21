@@ -2,7 +2,7 @@
 name: Sync Fork
 on:
   schedule:
-    - cron: '* 6 * * *' # every 30 minutes
+    - cron: '0 6 * * 6' # every 30 minutes
   workflow_dispatch: # on button click
 
 jobs:
@@ -11,4 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: tgymnich/fork-sync@v1.4
+      - uses: actions/checkout@v2
+      - name: Sync with remote
+        shell: pwsh
+        env:
+          GIT_EMAIL: ${{ secrets.GIT_EMAIL }}
+        run: |
+            ECHO "git config"
+            git config --global user.email "$env:GIT_EMAIL"
+            git config --global user.name "VSLCatena_GHService"
+
+            ECHO "remote add github https://github.com/webdevops/Dockerfile"
+            git remote add github https://github.com/webdevops/Dockerfile
+
+            ECHO "checkout master"
+            git checkout master
+            
+            ECHO "git status"
+            git status
+            
+            ECHO "git fetch github master"
+            git fetch github master
+            
+            ECHO "git merge -s recursive -X theirs github/master"
+            git merge -s recursive -X theirs github/master
+            
+            ECHO "git push -u origin $(Build.SourceBranchName)"
+            git push -u origin $(Build.SourceBranchName)
+
+            ECHO "git status"
+            git status
+
