@@ -4,29 +4,6 @@
 #+++++++++++++++++++++++++++++++++++++++
 
 
-# Staged baselayout builder
-FROM webdevops/toolbox AS baselayout
-RUN mkdir -p \
-        /baselayout/sbin \
-        /baselayout/usr/local/bin \
-    # Baselayout scripts
-    && wget -O /tmp/baselayout-install.sh https://raw.githubusercontent.com/webdevops/Docker-Image-Baselayout/master/install.sh \
-    && sh /tmp/baselayout-install.sh /baselayout \
-    ## Install go-replace
-    && wget -O "/baselayout/usr/local/bin/go-replace" "https://github.com/webdevops/goreplace/releases/download/1.1.2/gr-64-linux" \
-    && chmod +x "/baselayout/usr/local/bin/go-replace" \
-    && "/baselayout/usr/local/bin/go-replace" --version \
-    # Install gosu
-    && wget -O "/baselayout/sbin/gosu" "https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64" \
-    && wget -O "/tmp/gosu.asc" "https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64.asc" \
-    && export GNUPGHOME="$(mktemp -d)" \
-    && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
-    && gpg --batch --verify /tmp/gosu.asc "/baselayout/sbin/gosu" \
-    && rm -rf "$GNUPGHOME" /tmp/gosu.asc \
-    && chmod +x "/baselayout/sbin/gosu" \
-    && "/baselayout/sbin/gosu" nobody true
-
-
 FROM php:7.2-fpm-alpine
 
 LABEL maintainer=info@webdevops.io \
@@ -51,7 +28,8 @@ ENV COMPOSER_VERSION="2"
 
 
 # Baselayout copy (from staged image)
-COPY --from=baselayout /baselayout /
+COPY --from=webdevops/toolbox /baselayout/sbin/* /sbin/
+COPY --from=webdevops/toolbox /baselayout/usr/local/bin/* /usr/local/bin/
 
 
 COPY conf/ /opt/docker/
@@ -127,6 +105,7 @@ RUN set -x \
         libmemcached \
         yaml \
         # Build dependencies
+        linux-headers \
         autoconf \
         g++ \
         make \
@@ -134,6 +113,7 @@ RUN set -x \
         pcre-dev \
         gettext-dev \
         freetype-dev \
+        gmp-dev \
         libjpeg-turbo-dev \
         libpng-dev \
         vips-dev \
@@ -173,6 +153,7 @@ RUN set -x \
         bz2 \
         calendar \
         exif \
+        gmp \
         intl \
         gettext \
         ldap \
@@ -184,8 +165,8 @@ RUN set -x \
         pdo_pgsql \
         pgsql \
         soap \
-        sockets \
-        tokenizer \
+        sockets \        
+        tokenizer \        
         sysvmsg \
         sysvsem \
         sysvshm \
@@ -214,7 +195,6 @@ RUN set -x \
     && docker-php-ext-enable \
         apcu \
         redis \
-        imagick \
         mongodb \
         amqp \
         vips \
@@ -222,12 +202,14 @@ RUN set -x \
     # Uninstall dev and header packages
     && apk del -f --purge \
         autoconf \
+        linux-headers \
         g++ \
         make \
         libtool \
         pcre-dev \
         gettext-dev \
         freetype-dev \
+        gmp-dev \
         libjpeg-turbo-dev \
         libpng-dev \
         vips-dev \

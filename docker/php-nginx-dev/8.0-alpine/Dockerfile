@@ -17,13 +17,17 @@ COPY conf/ /opt/docker/
 
 RUN set -x \
     # Install development environment
+    && bash -c "$(curl -L https://installer.blackfire.io/installer.sh)" \
+    && blackfire php:install \
     && apk-install \
+        linux-headers \
         make \
         autoconf \
         g++ \
     && pecl install xdebug \
     && apk del -f --purge \
         autoconf \
+        linux-headers \
         g++ \
         make \
     && docker-php-ext-enable xdebug \

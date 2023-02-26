@@ -17,12 +17,12 @@ COPY conf/ /opt/docker/
 
 RUN set -x \
     # Install development environment
-    && wget -q -O - https://packages.blackfire.io/gpg.key | apt-key add - \
-    && echo "deb https://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-install \
-        blackfire-php \
-        blackfire-agent \
-    && pecl install xdebug \
+    && bash -c "$(curl -L https://installer.blackfire.io/installer.sh)" \
+    && blackfire php:install \
+    && echo 'deb https://packages.tideways.com/apt-packages-main any-version main' | tee /etc/apt/sources.list.d/tideways.list \
+    && wget -qO - https://packages.tideways.com/key.gpg | apt-key add - \
+    && apt-install tideways-php tideways-daemon \
+    && pecl install xdebug-3.1.6 \
     && docker-php-ext-enable xdebug \
     # Enable php development services
     && docker-service enable syslog \
