@@ -33,8 +33,8 @@ jobs:
             ECHO "git fetch github master"
             git fetch github master
             
-            ECHO "git merge -s recursive -X theirs github/master"
-            git merge -s recursive -X theirs github/master
+            ECHO "git merge -s recursive -X theirs github/master --allow-unrelated-histories"
+            git merge -s recursive -X theirs github/master --allow-unrelated-histories
             
             ECHO "git push -u origin $GITHUB_REF"
             git push -u origin $GITHUB_REF
