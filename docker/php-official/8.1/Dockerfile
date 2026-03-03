@@ -178,7 +178,7 @@ RUN set -x \
     && pecl install apcu \
     && pecl install excimer \
     && pecl install opentelemetry \
-    && pecl install protobuf \
+    && pecl install protobuf-4.33.5 \
     && pecl install xmlrpc-1.0.0RC3 \
     && pecl install vips \
     && pecl install redis \
