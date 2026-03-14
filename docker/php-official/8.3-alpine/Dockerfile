@@ -125,7 +125,7 @@ RUN set -x \
         icu-dev \
         postgresql-dev \
         libxml2-dev \
-        ldb-dev \
+        samba-dev \
         pcre-dev \
         libxslt-dev \
         libzip-dev \
@@ -178,7 +178,6 @@ RUN set -x \
         xsl \
         zip \
         gd \
-        gettext \
         opcache \
     # Install extensions for PHP 7.x
     # Memcached for 7.3 can currently only be built from master
@@ -230,7 +229,7 @@ RUN set -x \
         icu-dev \
         postgresql-dev \
         libxml2-dev \
-        ldb-dev \
+        samba-dev \
         pcre-dev \
         libxslt-dev \
         libzip-dev \

@@ -178,7 +178,6 @@ RUN set -x \
         xsl \
         zip \
         gd \
-        gettext \
         opcache \
     # Install extensions for PHP 7.x
     # Memcached for 7.3 can currently only be built from master
@@ -190,7 +189,7 @@ RUN set -x \
     && pecl install apcu \
     && pecl install excimer \
     && pecl install opentelemetry \
-    && pecl install protobuf \
+    && pecl install protobuf-4.33.5 \
     && pecl install vips \
     && pecl install yaml \
     && pecl install redis \

@@ -143,7 +143,7 @@ RUN set -x \
     && git clone --branch latest --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
     && cd /usr/src/php/ext/amqp && git submodule update --init \
     && git clone --branch master --depth 1 https://github.com/Imagick/imagick.git /usr/src/php/ext/imagick \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+    && docker-php-ext-configure ldap \
     && PHP_OPENSSL=yes docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install \
         bcmath \
@@ -173,13 +173,12 @@ RUN set -x \
         xsl \
         zip \
         gd \
-        gettext \
         opcache \
     && pecl install memcached \
     && pecl install apcu \
     && pecl install excimer \
     && pecl install opentelemetry \
-    && pecl install protobuf \
+    && pecl install protobuf-4.33.5 \
     && pecl install xmlrpc-1.0.0RC3 \
     && pecl install vips \
     && pecl install redis \
